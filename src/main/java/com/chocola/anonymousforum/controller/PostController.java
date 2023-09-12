@@ -1,5 +1,6 @@
 package com.chocola.anonymousforum.controller;
 
+import com.chocola.anonymousforum.data.dto.CreatePostDto;
 import com.chocola.anonymousforum.data.entity.Post;
 import com.chocola.anonymousforum.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
 @Slf4j
@@ -26,5 +28,11 @@ public class PostController {
                             @RequestParam(required = false, defaultValue = "") String searchContent) {
         Page<Post> posts = postService.findAll(page - 1, searchStandard, searchContent);
         return posts.getContent();
+    }
+
+    @ResponseStatus(CREATED)
+    @PostMapping
+    public void writePost(@RequestBody CreatePostDto dto) {
+        postService.save(dto);
     }
 }
