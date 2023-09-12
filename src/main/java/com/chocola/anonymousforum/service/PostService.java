@@ -24,7 +24,7 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public Page<Post> findAll(int page, String searchStandard, String searchContent) {
-        PageRequest pageable = PageRequest.of(page, 10);
+        PageRequest pageable = PageRequest.of(page, 5);
         SearchStandard standard = SearchStandard.valueOf(searchStandard);
         Page<Post> posts;
 

@@ -53,21 +53,25 @@ public class PostController {
     @ResponseStatus(BAD_REQUEST)
     @ExceptionHandler(NoSuchElementException.class)
     public String exceptionHandle(NoSuchElementException e) {
-        log.error("[PostController] Error!! : {}", e.getMessage());
+        logError(e);
         return "옳지 않은 파라미터입니다.";
     }
 
     @ResponseStatus(UNAUTHORIZED)
     @ExceptionHandler(NoMatchPasswordException.class)
     public String exceptionHandle(NoMatchPasswordException e) {
-        log.error("[PostController] Error!! : {}", e.getMessage());
+        logError(e);
         return "비밀번호가 일치하지 않습니다.";
     }
 
     @ResponseStatus(BAD_REQUEST)
     @ExceptionHandler({NumberFormatException.class, ArrayIndexOutOfBoundsException.class})
     public String exceptionHandle(Exception e) {
-        log.error("[PostController] Error!! : {}", e.getMessage());
+        logError(e);
         return "날짜 형식이 맞지 않습니다.";
+    }
+
+    private void logError(Exception e) {
+        log.error("[PostController] Error!! : {}", e.getMessage());
     }
 }
