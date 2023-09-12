@@ -1,6 +1,7 @@
 package com.chocola.anonymousforum.controller;
 
 import com.chocola.anonymousforum.data.dto.CreatePostDto;
+import com.chocola.anonymousforum.data.dto.ModifyPostDto;
 import com.chocola.anonymousforum.data.entity.Post;
 import com.chocola.anonymousforum.exception.NoMatchPasswordException;
 import com.chocola.anonymousforum.service.PostService;
@@ -40,8 +41,13 @@ public class PostController {
     @ResponseStatus(NO_CONTENT)
     @DeleteMapping("/{id}")
     public void deletePost(@PathVariable Long id, @RequestParam String password) {
-        log.info("password={}", password);
         postService.delete(id, password);
+    }
+
+    @ResponseStatus(NO_CONTENT)
+    @PutMapping("/{id}")
+    public void modifyPost(@PathVariable Long id, @RequestBody ModifyPostDto dto) {
+        postService.modify(id, dto);
     }
 
     @ResponseStatus(BAD_REQUEST)
