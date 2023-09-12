@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-    Page<Post> findAllByTitleContainsAndExistIsTrue(Pageable pageable, String searchContent);
-    Page<Post> findAllByCreatedDateLessThanAndExistIsTrue(Pageable pageable, LocalDateTime localDateTime);
+    Page<Post> findAllByExistIsTrue(Pageable pageable);
+    Page<Post> findAllByTitleContainsAndExistIsTrue(String searchContent, Pageable pageable);
+    Page<Post> findAllByCreatedDateLessThanAndExistIsTrue(LocalDateTime localDateTime, Pageable pageable);
 }

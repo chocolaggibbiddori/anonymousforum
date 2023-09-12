@@ -29,7 +29,7 @@ public class PostService {
         Page<Post> posts;
 
         if (standard == SearchStandard.TITLE) {
-            posts = postRepository.findAllByTitleContainsAndExistIsTrue(pageable, searchContent);
+            posts = postRepository.findAllByTitleContainsAndExistIsTrue(searchContent, pageable);
         } else if (standard == SearchStandard.CREATED_DATE) {
             int year;
             int month;
@@ -44,9 +44,9 @@ public class PostService {
             hour = Integer.parseInt(split[3]);
             minute = Integer.parseInt(split[4]);
 
-            posts = postRepository.findAllByCreatedDateLessThanAndExistIsTrue(pageable, LocalDateTime.of(year, month, dayOfMonth, hour, minute));
+            posts = postRepository.findAllByCreatedDateLessThanAndExistIsTrue(LocalDateTime.of(year, month, dayOfMonth, hour, minute), pageable);
         } else {
-            posts = postRepository.findAll(pageable);
+            posts = postRepository.findAllByExistIsTrue(pageable);
         }
 
         return posts;
