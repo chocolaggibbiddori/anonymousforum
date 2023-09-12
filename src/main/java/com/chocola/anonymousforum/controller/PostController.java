@@ -63,4 +63,11 @@ public class PostController {
         log.error("[PostController] Error!! : {}", e.getMessage());
         return "비밀번호가 일치하지 않습니다.";
     }
+
+    @ResponseStatus(BAD_REQUEST)
+    @ExceptionHandler({NumberFormatException.class, ArrayIndexOutOfBoundsException.class})
+    public String exceptionHandle(Exception e) {
+        log.error("[PostController] Error!! : {}", e.getMessage());
+        return "날짜 형식이 맞지 않습니다.";
+    }
 }

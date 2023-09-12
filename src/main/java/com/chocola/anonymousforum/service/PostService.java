@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 
 @RequiredArgsConstructor
@@ -23,8 +24,32 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public Page<Post> findAll(int page, String searchStandard, String searchContent) {
+        PageRequest pageable = PageRequest.of(page, 10);
         SearchStandard standard = SearchStandard.valueOf(searchStandard);
-        return postRepository.findAll(PageRequest.of(page, 10), standard.getValue(), searchContent);
+        Page<Post> posts;
+
+        if (standard == SearchStandard.TITLE) {
+            posts = postRepository.findAllByTitleContainsAndExistIsTrue(pageable, searchContent);
+        } else if (standard == SearchStandard.CREATED_DATE) {
+            int year;
+            int month;
+            int dayOfMonth;
+            int hour;
+            int minute;
+
+            String[] split = searchContent.split("[ -]");
+            year = Integer.parseInt(split[0]);
+            month = Integer.parseInt(split[1]);
+            dayOfMonth = Integer.parseInt(split[2]);
+            hour = Integer.parseInt(split[3]);
+            minute = Integer.parseInt(split[4]);
+
+            posts = postRepository.findAllByCreatedDateLessThanAndExistIsTrue(pageable, LocalDateTime.of(year, month, dayOfMonth, hour, minute));
+        } else {
+            posts = postRepository.findAll(pageable);
+        }
+
+        return posts;
     }
 
     public void save(CreatePostDto dto) {
